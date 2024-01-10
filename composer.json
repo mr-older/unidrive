@@ -5,9 +5,13 @@
 	"description": "Github release version detection",
     "homepage": "https://github.com/mr-older/unidrive",
 	"keywords": [
-		"github",
-		"version",
-		"release",
+		"system",
+		"drives",
+		"hdd",
+		"disks",
+		"smart",
+		"serial",
+		"disk-space",
 		"php"
 	],
     "require": {
