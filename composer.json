@@ -1,0 +1,21 @@
+{
+	"name": "mr-older/unidrive",
+    "type": "library",
+	"license": "MIT",
+	"description": "Github release version detection",
+    "homepage": "https://github.com/mr-older/unidrive",
+	"keywords": [
+		"github",
+		"version",
+		"release",
+		"php"
+	],
+    "require": {
+		"php": "^7.0 || ^8.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Unidrive\\": "src/Unidrive"
+        }
+    }
+}
