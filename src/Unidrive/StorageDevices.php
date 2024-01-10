@@ -1,8 +1,10 @@
 <?php
-#
-# Gets system storage devices (NAME,VENDOR,MODEL,SERIAL,WWN,SIZE)
-# and its SMART values into "devices" variable
-#
+/*
+*	Gets system storage devices (NAME,VENDOR,MODEL,SERIAL,WWN,SIZE)
+*	and its SMART values into "devices" variable
+*
+*	Author: Evgeny Zakharenko, 2024
+*/
 
 namespace UniDrive;
 
@@ -16,7 +18,7 @@ class StorageDevices
 			return false;
 		}
 
-		if($this->get($devices) === false || empty($devices)) {
+		if(($devices = $this->get($devices)) === false || empty($devices)) {
 			$this->error = "Error getting storage devices info";
 			return false;
 		}
@@ -37,6 +39,7 @@ class StorageDevices
 		}
 
 		$devices_array = array_slice($devices_array, 1, count($devices_array) - 1);
+
 
 		$devices = [];
 		foreach($devices_array as $device) {
@@ -108,7 +111,7 @@ class StorageDevices
 		return $smart;
 	}
 
-	public function getValueFromSMART($device_name, $value_name) {
+	public function getSMARTValue($device_name, $value_name) {
 		foreach((array) $this->devices[$device_name]['SMART'] as $key => $content) {
 			if($content["ATTRIBUTE_NAME"] == $value_name) {
 				 return $content["RAW_VALUE"];
