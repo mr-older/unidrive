@@ -112,9 +112,27 @@ class StorageDevices
 	}
 
 	public function getSMARTValue($device_name, $value_name) {
-		foreach((array) $this->devices[$device_name]['SMART'] as $key => $content) {
+		foreach((array) $this->devices[$device_name]['SMART'] as $content) {
 			if($content["ATTRIBUTE_NAME"] == $value_name) {
 				 return $content["RAW_VALUE"];
+			}
+		}
+		return false;
+	}
+
+	public function drivenameBySerial($serial) {
+		foreach((array) $this->devices as $drivename => $content) {
+			if($content["SERIAL"] == $serial) {
+				 return $drivename;
+			}
+		}
+		return false;
+	}
+
+	public function drivenameByWWN($wwn) {
+		foreach((array) $this->devices as $drivename => $content) {
+			if($content["WWN"] == $wwn) {
+				 return $drivename;
 			}
 		}
 		return false;
