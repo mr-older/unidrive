@@ -13,6 +13,14 @@ class StorageDevices
 	public $devices, $error;
 
 	public function __construct() {
+		if(($devices = $this->refresh()) === false) {
+			return false;
+		}
+
+		$this->devices = $devices;
+	}
+
+	public function refresh() {
 		if(exec("lsblk -pdo NAME,VENDOR,MODEL,SERIAL,WWN,SIZE", $devices) === false || empty($devices)) {
 			$this->error = "Error listing storage devices";
 			return false;
@@ -29,19 +37,19 @@ class StorageDevices
 			}
 		}
 
-		$this->devices = $devices;
+		return $devices;
 	}
 
 	private function get($devices) {
 		$devices_array = [];
+
 		foreach($devices as $device) {
 			$devices_array[] = explode(" ", preg_replace("/\s+/", " ", $device));
 		}
 
 		$devices_array = array_slice($devices_array, 1, count($devices_array) - 1);
-
-
 		$devices = [];
+
 		foreach($devices_array as $device) {
 			$devices[$device[0]]['VENDOR'] = $device[1];
 			$devices[$device[0]]['MODEL'] = $device[2];
@@ -56,6 +64,7 @@ class StorageDevices
 	private function getSMART($device) {
 		$first_to_seek = "ATTRIBUTE_NAME";
 		$last_to_seek = "SMART Error Log";
+
 		if(exec("smartctl -a $device", $smart) === false || empty($smart)) {
 			$this->error = "Error running smartctl, make sure it is available";
 			return false;
@@ -131,7 +140,7 @@ class StorageDevices
 
 	public function drivenameByWWN($wwn) {
 		foreach((array) $this->devices as $drivename => $content) {
-			if($content["WWN"] == $wwn) {
+			if($content["WWN"] == $wwn || str_replace("0x", "", $content["WWN"]) == $wwn) {
 				 return $drivename;
 			}
 		}
